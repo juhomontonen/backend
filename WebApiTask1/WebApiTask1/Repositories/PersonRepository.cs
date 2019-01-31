@@ -36,6 +36,7 @@ namespace WebApiTask1.Repositories
         {
             // SELECT * FROM PERSON;
             return _context.Person
+                .AsNoTracking()
                 .Include(p => p.Phone)
                 .ToList();
 
@@ -47,6 +48,7 @@ namespace WebApiTask1.Repositories
         {
             // SELECT * FROM PERSON WHERE ID=[id];
             return _context.Person
+                .AsNoTracking()
                 .Include(p => p.Phone)
                 .FirstOrDefault(p => p.Id == id);
         }
@@ -55,23 +57,28 @@ namespace WebApiTask1.Repositories
         {
             // SELECT * FROM PERSON WHERE NAME=[name];
             return _context.Person
+                .AsNoTracking()
                 .Include(p => p.Phone)
                 .FirstOrDefault(p => p.Name == name);
         }
 
-        public Person Update(int id, Person person)
+        public Person Update(Person person)
         {
-            var savedPerson = Read(id);
-            if (savedPerson == null)
-            {
-                throw new Exception("Person not found");
-            }
-            else
-            {
-                _context.Update(person);
-                _context.SaveChanges();
-                return person;
-            }
+            _context.Update(person);
+            _context.SaveChanges();
+            return person;
+
+            //var savedPerson = Read(id);
+            //if (savedPerson == null)
+            //{
+            //    throw new Exception("Person not found");
+            //}
+            //else
+            //{
+            //    _context.Update(person);
+            //    _context.SaveChanges();
+            //    return person;
+            //}
         }
     }
 }

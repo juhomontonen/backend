@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTask1.Models;
 using WebApiTask1.Repositories;
+using WebApiTask1.Services;
 
 namespace WebApiTask1.Controllers
 {
@@ -14,10 +15,12 @@ namespace WebApiTask1.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly IPersonRepository _personRepository;
+        private readonly IPersonService _personService;
 
-        public PersonsController(IPersonRepository personRepository)
+        public PersonsController(IPersonRepository personRepository, IPersonService personService)
         {
             _personRepository = personRepository;
+            _personService = personService;
         }
 
         [HttpGet]
@@ -29,7 +32,7 @@ namespace WebApiTask1.Controllers
             //    new Person ("Lisa", 35)
             //};
 
-            var persons = _personRepository.Read();
+            var persons = _personService.Read();
             return new JsonResult(persons);
         }
 
@@ -37,7 +40,7 @@ namespace WebApiTask1.Controllers
         [HttpGet("{id}")]
         public ActionResult<Person> Get(int id)
         {
-            var person = _personRepository.Read(id);
+            var person = _personService.Read(id);
             return new JsonResult(person);
         }
 
@@ -45,7 +48,7 @@ namespace WebApiTask1.Controllers
         [HttpPost]
         public ActionResult<Person> Post(Person person)
         {
-            var newPerson = _personRepository.Create(person);
+            var newPerson = _personService.Create(person);
             return new JsonResult(newPerson);
         }
 
@@ -53,7 +56,7 @@ namespace WebApiTask1.Controllers
         [HttpPut("{id}")]
         public ActionResult<Person> Put(int id, Person person)
         {
-            var updatedPerson = _personRepository.Update(id, person);
+            var updatedPerson = _personService.Update(id, person);
             return new JsonResult(updatedPerson);
         }
 
@@ -61,7 +64,7 @@ namespace WebApiTask1.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            return _personRepository.Delete(id);
+            return _personService.Delete(id);
         }
 
         //[HttpGet("{name}")]
